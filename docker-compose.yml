@@ -1,0 +1,32 @@
+---
+version: "3"
+services:
+  php-cli:
+    container_name: ${PHPCLI}
+    tty: true
+    stdin_open: true
+    build:
+      context: docker/php
+    command: bash
+    networks:
+      - cache-network
+    volumes:
+      - ./docker/app:/app
+
+
+  dynamodb:
+    container_name: ${DYNAMODB}
+    image: amazon/dynamodb-local
+    networks:
+      - cache-network
+
+  redis:
+    container_name: ${REDISDB}
+    image: redis
+    networks:
+      - cache-network
+    
+networks:
+  cache-network:
+    driver: bridge
+      
