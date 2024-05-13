@@ -28,6 +28,7 @@ $dynamoEndpoint = getenv("DYNAMODB");
 $dynamo = new DynamoDbClient(["endpoint" => "http://$dynamoEndpoint:8000"]);
 $tables = $dynamo->listTables();
 $tables =  $tables->get("TableNames");
+
 echo "DynamoDB connected \n";
 
 // scyllaDB
