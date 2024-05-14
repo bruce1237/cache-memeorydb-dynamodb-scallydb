@@ -1,7 +1,9 @@
 ---
-version: "3"
+version: "3.8"
 services:
   php-cli:
+    env_file:
+      - .env
     container_name: ${PHPCLI}
     tty: true
     stdin_open: true
@@ -15,18 +17,33 @@ services:
 
 
   dynamodb:
+    env_file:
+      - .env
     container_name: ${DYNAMODB}
     image: amazon/dynamodb-local
     networks:
       - cache-network
 
   redis:
+    env_file:
+      - .env
     container_name: ${REDISDB}
     image: redis
+    networks:
+      - cache-network
+  
+  scylla:
+    env_file:
+      - .env
+    container_name: ${SCYLLA}
+    hostname: ${SCYLLA}
+    image: scylladb/scylla
+    command: --smp 1
+    ports:
+      - "9042:9042"
     networks:
       - cache-network
     
 networks:
   cache-network:
     driver: bridge
-      
