@@ -1,7 +1,8 @@
 FROM php:8.2
 ENV REDISDB=redis
 ENV DYNAMODB=dynamo
-
+ENV SCYLLA=scylla
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN apt update && apt upgrade -y
 WORKDIR /app
@@ -11,16 +12,17 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
     php composer-setup.php && \
     php -r "unlink('composer-setup.php');" 
 
-RUN mv /app/composer.phar /usr/bin/composer
+RUN mv /app/composer.phar /usr/local/bin/composer
+
+# RUN /usr/local/bin/composer require aws/aws-sdk-php
 
 RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 
-RUN apt install -y awscli git unzip inetutils-ping
+RUN apt install -y awscli git unzip inetutils-ping python3-cassandra
 
 RUN pecl install redis
 RUN echo "extension=redis.so">>/usr/local/etc/php/php.ini
 
-# RUN /bin/sh -c composer install
 
 
     
